@@ -1,3 +1,4 @@
+import random
 from collections import defaultdict
 from dataclasses import replace
 from typing import TYPE_CHECKING
@@ -81,20 +82,23 @@ def _get_wild_match_params(world: "PokemonCrystalWorld", vanilla_pokemon: str):
 
 
 def randomize_wild_pokemon(world: "PokemonCrystalWorld"):
+    shared = world.options.shared_wild_encounters and world.options.wild_match_mode == WildMatchMode.option_none
+    rng = random.Random(world.shared_wild_seed) if shared else world.random
+
     if world.options.randomize_wilds and not world.is_universal_tracker:
 
         exclude_unown = Goal.UNOWN_HUNT in world.options.goal
         global_blocklist = world.options.wild_encounter_blocklist.get_ids(world)
         global_blocklist = global_blocklist | world.unique_static_wild_block
 
-        world.generated_wooper = get_random_pokemon(world, exclude_unown=True)
+        world.generated_wooper = get_random_pokemon(world, exclude_unown=True, rng=rng)
 
         def get_random_wild(vanilla_pokemon: str, encounter_blocklist: set[str] | None = None) -> str:
             match_types, match_bst = _get_wild_match_params(world, vanilla_pokemon)
             blocklist = (encounter_blocklist | global_blocklist) if encounter_blocklist else global_blocklist
             return get_random_pokemon(world, blocklist=blocklist or None,
                                       exclude_unown=exclude_unown,
-                                      types=match_types, match_bst=match_bst)
+                                      types=match_types, match_bst=match_bst, rng=rng)
 
         def randomize_encounter_list(encounter_list: list[EncounterMon]) -> list[EncounterMon]:
             new_encounters = list[EncounterMon]()
@@ -130,7 +134,7 @@ def randomize_wild_pokemon(world: "PokemonCrystalWorld"):
 
         for i, slot in enumerate(world.generated_contest):
             pokemon = get_random_pokemon(world, exclude_unown=True,
-                                         blocklist=global_blocklist or None) \
+                                         blocklist=global_blocklist or None, rng=rng) \
                 if world.options.randomize_wilds else slot.pokemon
             world.generated_contest[i] = replace(
                 slot,
@@ -166,7 +170,7 @@ def randomize_wild_pokemon(world: "PokemonCrystalWorld"):
                             line.append(evo.pokemon)
                             for evo2 in world.generated_pokemon[evo.pokemon].evolutions:
                                 line.append(evo2.pokemon)
-                        should_place.append(world.random.choice(line))
+                        should_place.append(rng.choice(line))
             elif world.options.randomize_wilds.value == RandomizeWilds.option_catch_em_all:
                 should_place.extend(world.generated_pokemon.keys())
 
@@ -206,7 +210,7 @@ def randomize_wild_pokemon(world: "PokemonCrystalWorld"):
                          world.logic.wild_regions[key] is LogicalAccess.InLogic and key.region_id is not None]
 
                 wilds.sort(key=lambda x: x[0].region_id)
-                world.random.shuffle(wilds)
+                rng.shuffle(wilds)
 
                 seen_pokemon = set()
                 to_replace = None
@@ -224,7 +228,7 @@ def randomize_wild_pokemon(world: "PokemonCrystalWorld"):
                     if not wilds:
                         break
                     encounter_key, encounters = wilds.pop()
-                    to_replace = world.random.choice(encounters).pokemon
+                    to_replace = rng.choice(encounters).pokemon
 
                 if encounter_key is None:
                     if stage == "must":

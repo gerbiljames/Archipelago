@@ -1,4 +1,5 @@
 import logging
+import random
 from collections.abc import Iterable
 from dataclasses import replace
 from typing import TYPE_CHECKING
@@ -482,8 +483,10 @@ def _filter_bst_range(bst_sorted: list[tuple[int, str]], target_bst: int, bst_ra
 def get_random_pokemon(world: "PokemonCrystalWorld", priority_pokemon: set[str] | None = None, types=None,
                        base_only=False, force_fully_evolved_at=None, current_level=None, starter=False,
                        exclude_unown=False, blocklist: set[str] | None = None,
-                       match_bst: int | None = None, evolve_at_level: int | None = None) -> str:
+                       match_bst: int | None = None, evolve_at_level: int | None = None,
+                       rng: random.Random | None = None) -> str:
     index = world._pokemon_pool_index
+    rng = rng or world.random
 
     # Start with either the priority set or the full set
     if priority_pokemon:
@@ -554,8 +557,8 @@ def get_random_pokemon(world: "PokemonCrystalWorld", priority_pokemon: set[str] 
 
     names = sorted(pool)
     if evolved_weights:
-        return world.random.choices(names, weights=[evolved_weights[name] for name in names])[0]
-    return world.random.choice(names)
+        return rng.choices(names, weights=[evolved_weights[name] for name in names])[0]
+    return rng.choice(names)
 
 
 def get_random_nezumi(random):

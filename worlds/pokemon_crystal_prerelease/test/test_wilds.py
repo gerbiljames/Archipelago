@@ -1,3 +1,6 @@
+import unittest
+
+from test.general import setup_multiworld
 from .bases import PokemonCrystalTestBase
 from ..wild import get_logically_available_wilds
 
@@ -142,3 +145,36 @@ class WildSwarmRegistrationGatingTest(PokemonCrystalTestBase):
         state.remove(self.world.create_event(registration_event))
         self.assertFalse(swarm_loc.access_rule(state),
                          "removing the registration event should gate the swarm location")
+
+
+class SharedWildEncountersTest(unittest.TestCase):
+    options = {
+        "randomize_wilds": "completely_random",
+        "time_of_day_encounters": "true",
+    }
+
+    def _generate(self, shared: bool):
+        from ..world import PokemonCrystalWorld
+        options = {**self.options, "shared_wild_encounters": str(shared).lower()}
+        multiworld = setup_multiworld([PokemonCrystalWorld, PokemonCrystalWorld], seed=1, options=[options, options])
+        return [multiworld.worlds[player] for player in multiworld.player_ids]
+
+    def test_shared_encounters_match(self):
+        first, second = self._generate(True)
+        self.assertEqual(first.generated_wild, second.generated_wild)
+        self.assertEqual(first.generated_contest, second.generated_contest)
+        self.assertEqual(first.generated_wooper, second.generated_wooper)
+
+    def test_unshared_encounters_differ(self):
+        first, second = self._generate(False)
+        self.assertNotEqual(first.generated_wild, second.generated_wild)
+
+    def test_catch_em_all_shared(self):
+        self.options = {**self.options, "randomize_wilds": "catch_em_all"}
+        first, second = self._generate(True)
+        self.assertEqual(first.generated_wild, second.generated_wild)
+
+    def test_match_mode_not_shared(self):
+        self.options = {**self.options, "wild_match_mode": "match_types"}
+        first, second = self._generate(True)
+        self.assertNotEqual(first.generated_wild, second.generated_wild)

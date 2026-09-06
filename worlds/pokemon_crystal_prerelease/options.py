@@ -1331,6 +1331,22 @@ class RandomizeWilds(Choice):
     option_catch_em_all = 4
 
 
+class SharedWildEncounters(Toggle):
+    """
+    Requires Wild Match Mode to be None, and has no effect otherwise or if wild Pokemon are not randomized.
+
+    Wild and bug catching contest encounters are generated from the multiworld seed instead of your own slot,
+    so every player who enables this will have identical wild encounters.
+
+    For identical tables, players must also match on: Randomize Wilds, Wild Encounter Blocklist, Encounter Grouping,
+    Time of Day Encounters, Encounter Slot Distribution and Dexsanity Starters,
+    and all must have or lack the Unown Hunt goal.
+    Unique Static Pokemon must be disabled, and type shortcuts in the blocklist require Randomize Types to be off.
+    Pokemon required by a player's own logic (for example trade requests or Ditto) may still differ.
+    """
+    display_name = "Shared Wild Encounters"
+
+
 class WildEncounterBlocklist(PokemonSet):
     """
     These Pokemon will not appear in the wild
@@ -3057,6 +3073,7 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     rematchsanity: Rematchsanity
     kinda_early_surf: KindaEarlySurf
     randomize_wilds: RandomizeWilds
+    shared_wild_encounters: SharedWildEncounters
     dexsanity: Dexsanity
     dexsanity_starters: DexsanityStarters
     dexsanity_logic: DexsanityLogic
@@ -3307,6 +3324,7 @@ OPTION_GROUPS = [
     OptionGroup(
         "Pokemon",
         [RandomizeWilds,
+         SharedWildEncounters,
          WildEncounterBlocklist,
          WildMatchMode,
          TimeOfDayEncounters,
