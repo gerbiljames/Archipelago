@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Dict, Set
 
 from BaseClasses import Item, ItemClassification
 from .data import data
+from .evolution import EVOLUTION_ITEM_TYPES, evolution_type_in_logic
 from .options import Shopsanity, ItemPoolFill, ShopsanityXItems, FreeFlyLocation, WildEncounterMethodsRequired
 
 if TYPE_CHECKING:
@@ -68,6 +69,9 @@ def item_const_name_to_label(const_name):
 
 EVOLUTION_ITEMS = ("WATER_STONE", "FIRE_STONE", "THUNDERSTONE", "LEAF_STONE", "SUN_STONE", "MOON_STONE",
                    "KINGS_ROCK", "METAL_COAT", "DRAGON_SCALE", "UP_GRADE", "LINK_CABLE")
+
+# gates the Ruins of Alph Omanyte item room regardless of evolution options
+ALWAYS_REQUIRED_EVOLUTION_ITEMS = ("WATER_STONE",)
 
 
 def get_random_filler_item(world: "PokemonCrystalWorld") -> str:
@@ -184,6 +188,14 @@ def get_classification_override(world: "PokemonCrystalWorld", item_data) -> Item
         return ItemClassification.useful
 
     if name == "Bicycle" and options.johto_only and not options.national_park_access:
+        return ItemClassification.useful
+
+    evolution_types = EVOLUTION_ITEM_TYPES.get(item_data.item_const)
+    if (evolution_types
+            # UT keeps out-of-logic evolution locations, which still need these items
+            and not world.is_universal_tracker
+            and item_data.item_const not in ALWAYS_REQUIRED_EVOLUTION_ITEMS
+            and not any(evolution_type_in_logic(world, evo_type) for evo_type in evolution_types)):
         return ItemClassification.useful
 
     return None

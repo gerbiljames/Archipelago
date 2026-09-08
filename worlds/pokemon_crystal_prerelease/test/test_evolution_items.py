@@ -2,6 +2,13 @@ from .bases import PokemonCrystalTestBase, verify_location_access, verify_region
 from ..items import EVOLUTION_ITEMS, item_const_name_to_label
 
 
+def verify_item_classifications(test: PokemonCrystalTestBase, expected_progression: dict[str, bool]) -> None:
+    for item in test.multiworld.itempool:
+        if item.name in expected_progression:
+            test.assertEqual(item.advancement, expected_progression[item.name],
+                             f"{item.name} advancement should be {expected_progression[item.name]}")
+
+
 class EvolutionItemsTest(PokemonCrystalTestBase):
     options = {}
 
@@ -41,6 +48,39 @@ class EvolutionItemsNoHeldItemMethodTest(PokemonCrystalTestBase):
             self.multiworld.get_location("Evolve Onix into Steelix", self.player)
         # itemless trade evolutions are gated by Use Item and remain in logic
         self.multiworld.get_location("Evolve Machoke into Machamp", self.player)
+
+    def test_held_items_not_progression(self):
+        verify_item_classifications(self, {
+            "King's Rock": False, "Metal Coat": False, "Dragon Scale": False, "Up-Grade": False,
+            "Link Cable": True, "Fire Stone": True, "Water Stone": True,
+        })
+
+
+class EvolutionItemsNoItemMethodsTest(PokemonCrystalTestBase):
+    options = {
+        "evolution_methods_required": ["Level", "Level and Stat", "Happiness"],
+    }
+
+    def test_only_water_stone_progression(self):
+        verify_item_classifications(self, {
+            item_const_name_to_label(item_const): item_const == "WATER_STONE"
+            for item_const in EVOLUTION_ITEMS
+        })
+
+    def test_omanyte_chamber_still_requires_water_stone(self):
+        verify_region_access(self, ["Water Stone"], ["REGION_RUINS_OF_ALPH_OMANYTE_ITEM_ROOM"])
+
+
+class EvolutionItemsNoMethodsTest(PokemonCrystalTestBase):
+    options = {
+        "evolution_methods_required": [],
+    }
+
+    def test_only_water_stone_progression(self):
+        verify_item_classifications(self, {
+            item_const_name_to_label(item_const): item_const == "WATER_STONE"
+            for item_const in EVOLUTION_ITEMS
+        })
 
 
 class EvolutionItemsJohtoOnlyTest(PokemonCrystalTestBase):

@@ -208,18 +208,38 @@ def get_random_pokemon_evolution(random: Random, pkmn_name: str, pkmn_data: Poke
     return random.choice(pkmn_data.evolutions).pokemon
 
 
+EVOLUTION_TYPE_METHODS = {
+    EvolutionType.Level: EvolutionMethodsRequired.LEVEL,
+    EvolutionType.Happiness: EvolutionMethodsRequired.HAPPINESS,
+    EvolutionType.Item: EvolutionMethodsRequired.USE_ITEM,
+    EvolutionType.Trade: EvolutionMethodsRequired.HELD_ITEM,
+    EvolutionType.Stats: EvolutionMethodsRequired.LEVEL_TYROGUE,
+}
+
+
+def evolution_type_in_logic(world: "PokemonCrystalWorld", evo_type: EvolutionType) -> bool:
+    method = EVOLUTION_TYPE_METHODS.get(evo_type)
+    return method is not None and method in world.options.evolution_methods_required.value
+
+
 def evolution_in_logic(world: "PokemonCrystalWorld", evolution: EvolutionData):
-    if evolution.evo_type is EvolutionType.Level:
-        return EvolutionMethodsRequired.LEVEL in world.options.evolution_methods_required.value
-    if evolution.evo_type is EvolutionType.Happiness:
-        return EvolutionMethodsRequired.HAPPINESS in world.options.evolution_methods_required.value
-    if evolution.evo_type is EvolutionType.Item:
-        return EvolutionMethodsRequired.USE_ITEM in world.options.evolution_methods_required.value
-    if evolution.evo_type is EvolutionType.Trade:
-        return EvolutionMethodsRequired.HELD_ITEM in world.options.evolution_methods_required.value
-    if evolution.evo_type is EvolutionType.Stats:
-        return EvolutionMethodsRequired.LEVEL_TYROGUE in world.options.evolution_methods_required.value
-    return False
+    return evolution_type_in_logic(world, evolution.evo_type)
+
+
+def _build_evolution_item_types() -> dict[str, frozenset[EvolutionType]]:
+    item_types = defaultdict[str, set[EvolutionType]](set)
+    for pkmn_data in crystal_data.pokemon.values():
+        for evolution in pkmn_data.evolutions:
+            if evolution.evo_type not in (EvolutionType.Item, EvolutionType.Trade) or not evolution.condition:
+                continue
+            item_types[evolution.condition].add(evolution.evo_type)
+            if evolution.evo_type is EvolutionType.Trade:
+                # trade evolutions need the Link Cable alongside the held item
+                item_types["LINK_CABLE"].add(EvolutionType.Trade)
+    return {item_const: frozenset(types) for item_const, types in item_types.items()}
+
+
+EVOLUTION_ITEM_TYPES = _build_evolution_item_types()
 
 
 def evolution_location_name(world: "PokemonCrystalWorld", from_pokemon: str, to_pokemon: str):

@@ -121,16 +121,16 @@ class Goal(EnhancedOptionSet):
     """
     Select one or more goals. All selected goals must be completed to win.
 
-    Elite Four: Defeat the Champion and enter the Hall of Fame
-    Red: Defeat Red in Mt. Silver
-    Diploma: Catch all logically available Pokemon and receive the diploma in Celadon City
-    Rival: Win all possible rival battles
-    Defeat Team Rocket: Vanquish Team Rocket in Slowpoke Well, Mahogany Town, Radio Tower and defeat the grunt
-     on Route 24 (if Kanto is accessible)
-    Unown Hunt: Catch all 26 Unown forms that are attached to signs across the region(s) and show the completed Unown dex
-     to the scientist in Ruins of Alph. In order to encounter the Unown you'll need to solve their corresponding tile puzzle.
-     Each puzzle requires 16 pieces which must be found first.
-    Battle Tower: Beat all 10 Battle Tower tiers (7 trainers each).
+    - Elite Four: Defeat the Champion and enter the Hall of Fame
+    - Red: Defeat Red in Mt. Silver
+    - Diploma: Catch all logically available Pokemon and receive the diploma in Celadon City
+    - Rival: Win all possible rival battles
+    - Defeat Team Rocket: Vanquish Team Rocket in Slowpoke Well, Mahogany Town, Radio Tower and defeat the grunt
+       on Route 24 (if Kanto is accessible)
+    - Unown Hunt: Catch all 26 Unown forms that are attached to signs across the region(s) and show the completed Unown dex
+       to the scientist in Ruins of Alph. In order to encounter the Unown you'll need to solve their corresponding tile puzzle.
+       Each puzzle requires 16 pieces which must be found first.
+    - Battle Tower: Beat all 10 Battle Tower tiers (7 trainers each).
     """
     display_name = "Goal"
 
@@ -767,7 +767,7 @@ class KindaEarlySurf(Toggle):
 
 class Rematchsanity(Toggle):
     """
-    Adds the phone-trainer rematch fights as checks (76 across 24 trainers).
+    Adds the phone-trainer rematch fights as checks.
 
     Rematches unlock in order as you hit story milestones (visiting Goldenrod / Olivine /
     etc., clearing the Radio Tower, beating the Elite Four, restoring power to Kanto).
@@ -1231,13 +1231,11 @@ class RandomizeBugCatchingContest(Choice):
 
 class RandomizePhoneCallItems(Toggle):
     """
-    Shuffles gift items from phone trainers (Fire Stone, Pink Bow, Star Piece, etc.) into
-    the AP item pool.
+    Shuffles gift items from phone trainers into the item pool.
 
     You need the Pokegear to register phone numbers and a Phone Card to make and receive calls.
 
-    Trainers that ask to see a Pokemon to swap numbers (e.g. Tiffany wanting Clefairy) are only
-    included if Randomize Pokemon Requests is also on.
+    Trainers that ask to see a Pokemon to exchange numbers are only included if Randomize Pokemon Requests is also on.
     """
     display_name = "Randomize Phone Call Items"
 
@@ -1361,10 +1359,10 @@ class WildMatchMode(Choice):
     """
     Controls how randomized wild Pokemon are matched to the vanilla encounters they replace.
 
-    None: Wild Pokemon are replaced with no regard for the encounter they replace
-    Match Types: Wild Pokemon are replaced with Pokemon of the same type
-    Match Base Stats: Wild Pokemon are replaced with Pokemon of similar base stat totals
-    Match Types and Base Stats: Wild Pokemon are replaced with Pokemon of the same type and similar base stat totals
+    - None: Wild Pokemon are replaced with no regard for the encounter they replace
+    - Match Types: Wild Pokemon are replaced with Pokemon of the same type
+    - Match Base Stats: Wild Pokemon are replaced with Pokemon of similar base stat totals
+    - Match Types and Base Stats: Wild Pokemon are replaced with Pokemon of the same type and similar base stat totals
 
     This setting has no effect if wild Pokemon are not randomized.
     """
@@ -1552,10 +1550,10 @@ class RandomizeTrainerParties(Choice):
     """
     Randomizes Pokemon in enemy trainer parties
 
-    Match Types: Pokemon are replaced with Pokemon of the same type
-    Match Base Stats: Pokemon are replaced with Pokemon of similar base stat totals
-    Match Types and Base Stats: Pokemon are replaced with Pokemon of the same type and similar base stat totals
-    Completely Random: Pokemon are replaced with completely random Pokemon
+    - Match Types: Pokemon are replaced with Pokemon of the same type
+    - Match Base Stats: Pokemon are replaced with Pokemon of similar base stat totals
+    - Match Types and Base Stats: Pokemon are replaced with Pokemon of the same type and similar base stat totals
+    - Completely Random: Pokemon are replaced with completely random Pokemon
     """
     display_name = "Randomize Trainer Parties"
     default = 0
@@ -2940,7 +2938,7 @@ class RandomizeEntrances(EnhancedOptionSet):
 
     Categories:
     - Dungeon: Entrances to multi-floor areas with trainers/items (towers, caves, hideouts). Gyms excluded.
-    - Dungeon Interior: Entrances between two interior regions of a dungeon (internal stairs/ladders/warps). Dropdowns and Holes excluded.
+    - Dungeon Interior: Entrances between two interior regions of a dungeon (internal stairs/ladders/warps).
     - Gym: Entrances to gyms.
     - Gym Interior: Entrances between two interior regions of a gym (Blackthorn Gym and Saffron Gym).
     - Mart: Entrances to Pokemarts, department stores, and other shop-like buildings.
@@ -2951,7 +2949,7 @@ class RandomizeEntrances(EnhancedOptionSet):
     - Pokecenter: Entrances to pokecenters.
     - Elevator: Entrances to elevators for each floor.
     - Pokemon League: Entrances involving Elite Four chambers.
-    - One-Way: One-way entrances (holes, ledges, forced teleports). Will not be shuffled with other entrances.
+    - One-Way: One-way entrances. Will not be shuffled with other entrances.
 
     _All includes all categories.
     _Random has a 50% chance to include each category not already included.
