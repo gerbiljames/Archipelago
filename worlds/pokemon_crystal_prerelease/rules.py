@@ -20,7 +20,7 @@ from .options import Goal, JohtoOnly, Route32Condition, UndergroundsRequirePower
     Route44AccessRequirement, RandomizeBadges, RadioTowerRequirement, PokemonCrystalOptions, Shopsanity, \
     RequireItemfinder, Route42Access, RedGyaradosAccess, PhoneCallMode, Route30Access, \
     SouthKantoCondition, RemoveBadgeRequirement, WildEncounterMethodsRequired, SaffronGatehouseTea, \
-    VanillaEventChains, RandomizeFlyUnlocks
+    VanillaEventChains, RandomizeFlyUnlocks, Route12Access
 from .pokemon import add_hm_compatibility, get_chamber_event_for_unown
 from .pokemon_data import ALL_UNOWN, SWARM_REGISTRATIONS
 from .rematch_trainer_data import REMATCH_TRAINERS, SCALING_SUFFIX, rematch_location_name
@@ -1459,10 +1459,11 @@ def set_rules(world: "PokemonCrystalWorld") -> None:
 
         # Route 12
         if world.options.route_12_access:
-            set_rule(get_entrance("REGION_ROUTE_12:NORTH -> REGION_ROUTE_12:SOUTH"),
-                     Has("Squirtbottle") | CanUseHM(CanUseHM.SURF, kanto=True))
-            set_rule(get_entrance("REGION_ROUTE_12:SOUTH -> REGION_ROUTE_12:NORTH"),
-                     Has("Squirtbottle") | CanUseHM(CanUseHM.SURF, kanto=True))
+            r12_rule = Has("Squirtbottle")
+            if world.options.route_12_access.value == Route12Access.option_weird_tree:
+                r12_rule |= CanUseHM(CanUseHM.SURF, kanto=True)
+            set_rule(get_entrance("REGION_ROUTE_12:NORTH -> REGION_ROUTE_12:SOUTH"), r12_rule)
+            set_rule(get_entrance("REGION_ROUTE_12:SOUTH -> REGION_ROUTE_12:NORTH"), r12_rule)
 
         set_rule(get_location("Route 12 - Item behind North Cut Tree"), CanUseHM(CanUseHM.CUT, kanto=True))
 

@@ -640,14 +640,16 @@ class Route12Access(Choice):
     """
     Sets the requirement to pass between the north and south parts of Route 12
     - Vanilla: No requirement
-    - Weird Tree: Requires Squirtbottle
+    - Weird Tree: Requires Squirtbottle, but can be bypassed with Surf
+    - Weird Tree Surf Block: Requires Squirtbottle and adds boulders to prevent surfing around
 
-    The roadblock is north of the path to Route 11 and can be bypassed with Surf
+    The roadblock is north of the path to Route 11
     """
     display_name = "Route 12 Access"
     default = 0
     option_vanilla = 0
     option_weird_tree = 1
+    option_weird_tree_surf_block = 2
 
 
 class SSAquaAccess(Choice):

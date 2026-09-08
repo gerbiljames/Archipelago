@@ -1379,6 +1379,10 @@
       "weird_tree": {
         "REGION_ROUTE_12:NORTH -> REGION_ROUTE_12:SOUTH": "Route 12 Weird Tree / Water Crossing (Southbound)",
         "REGION_ROUTE_12:SOUTH -> REGION_ROUTE_12:NORTH": "Route 12 Weird Tree / Water Crossing (Northbound)"
+      },
+      "weird_tree_surf_block": {
+        "REGION_ROUTE_12:NORTH -> REGION_ROUTE_12:SOUTH": "Route 12 Weird Tree Passage (Southbound)",
+        "REGION_ROUTE_12:SOUTH -> REGION_ROUTE_12:NORTH": "Route 12 Weird Tree Passage (Northbound)"
       }
     },
     "route_2_access": {

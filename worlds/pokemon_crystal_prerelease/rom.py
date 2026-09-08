@@ -29,7 +29,7 @@ from .options import UndergroundsRequirePower, RequireItemfinder, Goal, VanillaE
     FreeFlyLocation, HMBadgeRequirements, ShopsanityPrices, WildEncounterMethodsRequired, Shopsanity, \
     RequireFlash, FieldMoveMenuOrder, RedGyaradosAccess, TrainerPalette, PokemonCrystalOptions, RandomizeBadges, \
     RandomizePokegear, BreedingMethodsRequired, RandomizePokedex, Route30Access, SouthKantoCondition, \
-    SaffronGatehouseTea, ModifyPalettes, TrainerGender, PhysicalSpecialSplit, ModerniseMovesType
+    SaffronGatehouseTea, ModifyPalettes, TrainerGender, PhysicalSpecialSplit, ModerniseMovesType, Route12Access
 from .phone_data import done_cmd
 from .pokemon_data import ALL_UNOWN
 from .rematch_trainer_data import REMATCH_TRAINER_LOCATION_BASE, NUM_REMATCH_TRAINER_LOCATIONS
@@ -1929,6 +1929,15 @@ def generate_output(world: "PokemonCrystalWorld", output_directory: str, patch: 
 
     if world.options.route_12_access:
         write_bytes([0], data.rom_addresses["AP_Setting_Route12Sudowoodo"] + 2)
+        if world.options.route_12_access.value == Route12Access.option_weird_tree_surf_block:
+            # Due to limitations with map tiles, move Fisher Stephen's pier one block up to make things fit
+            replace_map_tiles(patch, "Route12", 6, 10, [0x05, 0x05]) # pier
+            replace_map_tiles(patch, "Route12", 6, 11, [0x78, 0x78]) # pier bottom
+            replace_map_tiles(patch, "Route12", 6, 12, [0x6b, 0x6b, 0x6b, 0x15]) # rocks
+            write_bytes([25], data.rom_addresses["AP_Setting_Route12SurfBlock_StephenPos"] + 1)
+            _, text_address = rom_offset_to_address(data.rom_addresses["AP_Address_StephenMovedText"])
+            text_address = text_address.to_bytes(2, "little")
+            write_bytes(text_address, data.rom_addresses["AP_Setting_Route12SurfBlock_StephenText"] + 1)
 
     if world.options.magnet_train_access:
         write_bytes([1], data.rom_addresses["AP_Setting_VanillaMagnetTrain_1"] + 1)
