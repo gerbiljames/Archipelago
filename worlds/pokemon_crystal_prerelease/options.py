@@ -1235,7 +1235,7 @@ class RandomizePhoneCallItems(Toggle):
     """
     Shuffles gift items from phone trainers into the item pool.
 
-    You need the Pokegear to register phone numbers and a Phone Card to make and receive calls.
+    You need the Pokegear to register phone numbers and the Phone Card to make and receive calls.
 
     Trainers that ask to see a Pokemon to exchange numbers are only included if Randomize Pokemon Requests is also on.
     """
@@ -1316,9 +1316,9 @@ class RandomizeWilds(Choice):
     """
     Randomizes species of wild Pokemon
 
-    Base Forms: Ensures that at least every Pokemon that cannot be obtained through evolution is available in the wild
-    Evolution Lines: Ensures that at least one Pokemon from each evolutionary line can be obtained in the wild
-    Catch 'em All: Ensures that every Pokemon will be obtainable in the wild
+    - Base Forms: Ensures that at least every Pokemon that cannot be obtained through evolution is available in the wild
+    - Evolution Lines: Ensures that at least one Pokemon from each evolutionary line can be obtained in the wild
+    - Catch 'em All: Ensures that every Pokemon will be obtainable in the wild
 
     If this setting is anything other than vanilla, bug catching contest encounters will be completely random.
     """
@@ -1390,11 +1390,11 @@ class EncounterGrouping(Choice):
     Determines how randomized wild Pokemon are grouped in encounter tables.
 
     - All Split: Each encounter area will have each slot randomized separately. For example, grass areas will have seven
-    randomized encounter slots.
+      randomized encounter slots.
     - One to One: Each encounter area will retain its vanilla slot grouping. For example, if an area has two encounters
-    in vanilla, it will be randomized as two slots.
+      in vanilla, it will be randomized as two slots.
     - One per Method: Each encounter method on a route will be treated as a single slot. For example, the grass on a route
-    will contain only a single encounter. Each rod is a separate encounter.
+      will contain only a single encounter. Each rod is a separate encounter.
 
     This setting has no effect if wild Pokemon are not randomized.
     This setting does not affect the bug catching contest.
@@ -1523,10 +1523,10 @@ class UniqueStaticPokemon(Choice):
 
     Does nothing if static Pokemon are not randomized.
 
-    Legendaries Only: only applies to the four legendary static slots (Suicune, Lugia, Ho-Oh, Celebi)
-    Legendaries and Uniques: the legendary slots plus the unique overworld encounters
+    - Legendaries Only: only applies to the four legendary static slots (Suicune, Lugia, Ho-Oh, Celebi)
+    - Legendaries and Uniques: the legendary slots plus the unique overworld encounters
     (Sudowoodo, Red Gyarados, Snorlax, Lapras)
-    All: applies to every static slot
+    - All: applies to every static slot
     """
     display_name = "Unique Static Pokemon"
     default = 0
@@ -2381,9 +2381,8 @@ class ExpShareType(Choice):
     """
     Sets which experience-sharing item is placed in the multiworld.
 
-    Exp Share: The vanilla Exp Share.
-
-    Exp All: A key item that toggles on/off. When on, all non-participating party Pokemon earn
+    - Exp Share: The vanilla Exp Share.
+    - Exp All: A key item that toggles on/off. When on, all non-participating party Pokemon earn
     experience.
     """
     display_name = "Exp Share Type"

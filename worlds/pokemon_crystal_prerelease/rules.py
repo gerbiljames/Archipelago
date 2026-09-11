@@ -1450,12 +1450,10 @@ def set_rules(world: "PokemonCrystalWorld") -> None:
         set_rule(get_location("EVENT_RESTORED_POWER_TO_KANTO"), Has("Machine Part"))
         set_rule(get_location("Power Plant - TM07 from Manager"), Has("EVENT_RESTORED_POWER_TO_KANTO"))
 
-        # Rock Tunnel
         # Lavender
-        if world.options.randomize_pokegear:
+        if world.options.randomize_pokegear or world.options.remote_items:
             set_rule(get_location("Lavender Radio Tower - EXPN Card"), Has("EVENT_RESTORED_POWER_TO_KANTO"))
-        else:
-            set_rule(get_location("EVENT_GOT_EXPN_CARD"), Has("EVENT_RESTORED_POWER_TO_KANTO"))
+        set_rule(get_location("EVENT_GOT_EXPN_CARD"), Has("EVENT_RESTORED_POWER_TO_KANTO"))
 
         # Route 12
         if world.options.route_12_access:
